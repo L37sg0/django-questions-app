@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import url, include
+from django.urls import path
+#from django.views.generic.base import TemplateView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/questions/?', include('questions.api.urls', namespace='api-questions')),
+    #url('', TemplateView.as_view(template_name='frontend/home.html'), name='home'),
 ]

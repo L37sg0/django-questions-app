@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Questions</title>
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body style="background-image: url('img/quest.jpg')">
+        <div class="container"> 
+            <br>
+            <br>          
+            <h1 class="alert-dark bg-success" style="text-align: center;">Въпроси</h1>
+            <br>
+            <br>       
+            <table class="table table-dark table-hover">
+              <thead>
+                <tr>
+                  <th id="question">Question</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td id="a" onclick="checkAnswer(this.id);">Answer a</td>
+                </tr>
+                <tr>
+                  <td id="b" onclick="checkAnswer(this.id);">Answer b</td>
+                </tr>
+                <tr>
+                  <td id="c" onclick="checkAnswer(this.id);">Answer c</td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+        <script>
+//Create a random url address for a random question from the REST API
+            function randomQuestion(){
+                // Fetch data from the url
+                fetch('http://localhost:8000/api/questions?format=json').then(response => {
+                    return response.json();
+                }).then(data => {
+                    // Work with JSON data here
+                    let len = data["questionsLength"];
+                    let randnum = Math.floor(Math.random() * len) + 1;
+                    let url = 'http://localhost:8000/api/questions/' + randnum + '?format=json';
+                    fetchData(url);
+                }).catch(err => {
+                    // Do something for an error here
+                });
+
+            }
+//Fetch the data for a question which the REST API provides
+            function fetchData(url){
+                // Fetch data from the url
+                fetch(url).then(response => {
+                    return response.json();
+                }).then(data => {
+                    // Work with JSON data here
+                    console.log(data);
+                    document.getElementById("question").innerHTML = data["question_text"];
+                    document.getElementById("a").innerHTML = "a. " + data["answer_a_text"];
+                    document.getElementById("b").innerHTML = "b. " + data["answer_b_text"];
+                    document.getElementById("c").innerHTML = "c. " + data["answer_c_text"];
+                    answer = data["answer_corect_text"];
+                    //getAnswer(answer);
+                }).catch(err => {
+                    // Do something for an error here
+                });
+            }
+//Check if the given answer is right
+            function checkAnswer(atr)
+            {
+                given_answer = document.getElementById(atr);
+                right_answer = document.getElementById(answer);
+                if(answer === atr)
+                {
+                    console.log('yes');
+                    given_answer.className = "alert-success";
+                    //location.reload();
+                    setTimeout(location.reload.bind(location), 500);
+                }else{
+                    console.log('no');
+                    given_answer.className = "alert-danger";
+                    right_answer.className = "alert-success";
+                    setTimeout(location.reload.bind(location), 500);
+                }
+            }
+            
+            randomQuestion();
+        </script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+    </body>
+</html>

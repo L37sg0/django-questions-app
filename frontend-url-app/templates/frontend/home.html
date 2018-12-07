@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Questions</title>
+    </head>
+    <body>
+        <h1 id="question">Question</h1>
+        <h2 id="a">Answer a</h2>
+        <h2 id="b">Answer b</h2>
+        <h2 id="c">Answer c</h2>
+        <script>
+            // Replace ./data.json with your JSON feed
+            fetch('http://localhost:8000/api/questions/1?format=json').then(response => {
+                return response.json();
+            }).then(data => {
+                // Work with JSON data here
+                console.log(data);
+                document.getElementById("question").innerHTML = data["question_text"]
+                document.getElementById("a").innerHTML = data["answer_a_text"]
+                document.getElementById("b").innerHTML = data["answer_b_text"]
+                document.getElementById("c").innerHTML = data["answer_c_text"]
+            }).catch(err => {
+                // Do something for an error here
+            });
+        </script>
+    </body>
+</html>
