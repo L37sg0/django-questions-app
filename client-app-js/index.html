@@ -32,8 +32,14 @@
                 </tr>
               </tbody>
             </table>
+            <br>
+            <br>          
+            <h1 class="table-dark" style="text-align: center;">Точки:</h1>
+            <br>          
+            <h1 id="points" class="alert-dark bg-success" style="text-align: center;"></h1>
         </div>
         <script>
+            points = 0
 //Create a random url address for a random question from the REST API
             function randomQuestion(){
                 // Fetch data from the url
@@ -57,12 +63,24 @@
                     return response.json();
                 }).then(data => {
                     // Work with JSON data here
-                    console.log(data);
-                    document.getElementById("question").innerHTML = data["question_text"];
-                    document.getElementById("a").innerHTML = "a. " + data["answer_a_text"];
-                    document.getElementById("b").innerHTML = "b. " + data["answer_b_text"];
-                    document.getElementById("c").innerHTML = "c. " + data["answer_c_text"];
+                    question = document.getElementById("question");
+                    answer_a = document.getElementById("a");
+                    answer_b = document.getElementById("b");
+                    answer_c = document.getElementById("c");
                     answer = data["answer_corect_text"];
+
+                    question.innerHTML = data["question_text"];
+                    
+                    answer_a.className = "";
+                    answer_b.className = "";
+                    answer_c.className = "";
+
+                    answer_a.innerHTML = "a. " + data["answer_a_text"];
+                    answer_b.innerHTML = "b. " + data["answer_b_text"];
+                    answer_c.innerHTML = "c. " + data["answer_c_text"];
+                    document.getElementById("points").innerHTML = points;
+
+
                     //getAnswer(answer);
                 }).catch(err => {
                     // Do something for an error here
@@ -77,14 +95,24 @@
                 {
                     console.log('yes');
                     given_answer.className = "alert-success";
-                    //location.reload();
-                    setTimeout(location.reload.bind(location), 500);
+                    countPoints(1);
+                    
+                    setTimeout(randomQuestion, 500);
+                    //setTimeout(location.reload.bind(location), 500);
                 }else{
                     console.log('no');
                     given_answer.className = "alert-danger";
                     right_answer.className = "alert-success";
-                    setTimeout(location.reload.bind(location), 500);
+                    countPoints(-1);
+                    setTimeout(randomQuestion, 500);
+                    //setTimeout(location.reload.bind(location), 500);
                 }
+            }
+
+            function countPoints(atr)
+            {
+                points = points + atr;
+                console.log(points);
             }
             
             randomQuestion();
